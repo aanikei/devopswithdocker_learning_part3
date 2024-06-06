@@ -28,3 +28,10 @@ jobs:
           file: ./express-app/Dockerfile
           push: true
           tags: aanikei/express-app:latest
+
+      - name: Deploy to render
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+          wait-for-success: true
