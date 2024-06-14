@@ -1,0 +1,29 @@
+FROM alpine as build-stage
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+COPY --from=golang:alpine /usr/local/go/ /usr/local/go/
+ 
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+RUN go build -ldflags "-s -w"
+
+
+
+FROM alpine
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /usr/src/app .
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+USER appuser
+
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+CMD ["./server"]

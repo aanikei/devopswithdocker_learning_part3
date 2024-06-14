@@ -1,0 +1,26 @@
+FROM node:alpine
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm install --loglevel verbose
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN npm run build
+
+RUN npm install -g serve
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+# scripts": {
+#   "start": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+#   "build": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts build"
+# },

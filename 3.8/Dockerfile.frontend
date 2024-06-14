@@ -1,0 +1,27 @@
+FROM alpine as build-stage
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN apk add --update nodejs npm && npm install --loglevel verbose
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN npm run build
+
+
+
+FROM alpine
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /usr/src/app/build .
+
+RUN apk add --update nodejs npm && npm install -g serve && addgroup -S appgroup && adduser -S appuser -G appgroup
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000"]

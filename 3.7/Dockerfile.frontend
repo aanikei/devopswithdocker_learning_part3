@@ -1,0 +1,27 @@
+FROM node:slim
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm install --loglevel verbose
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+RUN npm run build && npm install -g serve && useradd -m appuser
+
+USER appuser
+
+CMD ["serve", "-s", "-l", "5000", "build"]
+
+#just can't make v16 to work due to network issue (error below), so will try latest slim
+#206.3 npm verb Linux 6.5.0-35-generic
+#206.3 npm verb node v16.20.2
+#206.3 npm verb npm  v8.19.4
+#206.3 npm ERR! code FETCH_ERROR
+#206.3 npm ERR! errno FETCH_ERROR
+#206.3 npm ERR! invalid json response body at https://registry.npmjs.org/@pmmmwh%2freact-refresh-webpack-plugin reason: Invalid response body while trying to fetch https://registry.npmjs.org/@pmmmwh%2freact-refresh-webpack-plugin: Socket timeout
+#206.3 npm verb exit 1
+

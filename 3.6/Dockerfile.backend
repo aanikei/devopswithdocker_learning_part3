@@ -1,0 +1,15 @@
+FROM golang:1.16
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+ENV REQUEST_ORIGIN=http://localhost:5000
+
+RUN go build && useradd -m appuser && apt-get purge -y --auto-remove curl && rm -rf /var/lib/apt/lists/* && apt-get purge -y --auto-remove cpp-10 && dpkg --purge gcc g++-10 && apt-get purge -y --auto-remove git && dpkg --purge gcc gcc-10 && apt autoremove
+
+USER appuser
+
+CMD ["./server"]

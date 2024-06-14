@@ -1,0 +1,30 @@
+$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+backend      latest    e7dd344b30db   34 minutes ago   1.07GB
+frontend     latest    6cee4c8113db   7 hours ago      960MB
+
+$ docker image inspect backend | grep -A 0 Size
+        "Size": 1065517178,
+	
+$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+backend.3.6   latest    b265f322ed56   33 minutes ago   1.07GB
+backend       latest    e7dd344b30db   37 minutes ago   1.07GB
+frontend      latest    6cee4c8113db   7 hours ago      960MB
+
+$ docker image inspect backend.3.6 | grep -A 0 Size
+        "Size": 1066822977,
+        
+$ docker image inspect 6c | grep -A 0 Size
+        "Size": 960131216,
+	
+$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE                                                                                                  
+frontend      latest    56caa202c8e5   3 minutes ago   960MB
+backend.3.6   latest    b265f322ed56   2 hours ago     1.07GB
+backend       latest    e7dd344b30db   2 hours ago     1.07GB
+<none>        <none>    6cee4c8113db   9 hours ago     960MB
+
+$ docker image inspect frontend | grep -A 0 Size
+        "Size": 960372335,
+
